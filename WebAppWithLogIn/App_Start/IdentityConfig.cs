@@ -11,15 +11,45 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using WebAppWithLogIn.Models;
+using SendGrid;
+using System.Net.Mail;
+using System.Net;
+using System.Configuration;
+using System.Diagnostics;
 
 namespace WebAppWithLogIn
 {
     public class EmailService : IIdentityMessageService
     {
-        public Task SendAsync(IdentityMessage message)
+        public async Task SendAsync(IdentityMessage message)
         {
             // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            await configSendGridAsync(message);
+        }
+
+        private async Task configSendGridAsync(IdentityMessage message)
+        {
+            SendGridMessage sendGridMessage = new SendGridMessage();
+
+            sendGridMessage.AddTo(message.Destination);
+            sendGridMessage.From = new MailAddress("denismissias@hotmail.com", "Denis Missias");
+            sendGridMessage.Subject = message.Subject;
+            sendGridMessage.Text = message.Body;
+            sendGridMessage.Html = message.Body;
+
+            NetworkCredential credentials = new NetworkCredential(ConfigurationManager.AppSettings["mailAccount"], ConfigurationManager.AppSettings["mailPassword"]);
+
+            Web transportWeb = new Web(credentials);
+
+            if (transportWeb != null)
+            {
+                await transportWeb.DeliverAsync(sendGridMessage);
+            }
+            else
+            {
+                Trace.TraceError("Failed to create Web transport.");
+                await Task.FromResult(0);
+            }
         }
     }
 
