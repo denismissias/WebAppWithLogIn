@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using WebAppWithLogIn.Models;
 using SendGrid;
-using System.Net.Mail;
-using System.Net;
+using System;
 using System.Configuration;
 using System.Diagnostics;
+using System.Net;
+using System.Net.Mail;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using WebAppWithLogIn.Models;
 
 namespace WebAppWithLogIn
 {
